@@ -1,107 +1,38 @@
 const Encore = require('@symfony/webpack-encore');
-
-// Manually configure the runtime environment if not already configured yet by the "encore" command.
-// It's useful when you use tools that rely on webpack.config.js file.
-if (!Encore.isRuntimeEnvironmentConfigured()) {
-    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
-}
+const { VueLoaderPlugin } = require('vue-loader');
 
 Encore
-    // directory where compiled assets will be stored
+    // Directorio donde se guardará la compilación
     .setOutputPath('public/build/')
-    // public path used by the web server to access the output path
+    
+    // Public path usado por el servidor web
     .setPublicPath('/build')
-    .enableVueLoader()
-    // only needed for CDN's or subdirectory deploy
-    //.setManifestKeyPrefix('build/')
-
-    /*
-     * ENTRY CONFIG
-     *
-     * Each entry will result in one JavaScript file (e.g. app.js)
-     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
-     */
+    
+    // Definir el punto de entrada principal del proyecto
     .addEntry('app', './assets/app.js')
 
-    // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
-    .splitEntryChunks()
+    // Habilitar Vue.js con la configuración correcta
+    .enableVueLoader(() => {}, { runtimeCompilerBuild: true })
 
-    // will require an extra script tag for runtime.js
-    // but, you probably want this, unless you're building a single-page app
+    // Limpiar el directorio de salida antes de construir
+    .cleanupOutputBeforeBuild()
+
+    // Habilitar source maps (útil para debugging)
+    .enableSourceMaps(!Encore.isProduction())
+
+    // Habilitar la generación de un único runtime chunk para optimizar
     .enableSingleRuntimeChunk()
 
-    /*
-     * FEATURE CONFIG
-     *
-     * Enable & configure other features below. For a full
-     * list of features, see:
-     * https://symfony.com/doc/current/frontend.html#adding-more-features
-     */
-    .cleanupOutputBeforeBuild()
-    .enableBuildNotifications()
-    .enableSourceMaps(!Encore.isProduction())
-    // enables hashed filenames (e.g. app.abc123.css)
+    // Habilitar el soporte de Sass/SCSS
+    .enableSassLoader()
+
+    // Habilitar versiones de archivos hash en producción
     .enableVersioning(Encore.isProduction())
 
-    // configure Babel
-    // .configureBabel((config) => {
-    //     config.plugins.push('@babel/a-babel-plugin');
-    // })
+    // Habilitar notificaciones en consola
+    .enableBuildNotifications()
 
-    // enables and configure @babel/preset-env polyfills
-    .configureBabelPresetEnv((config) => {
-        config.useBuiltIns = 'usage';
-        config.corejs = '3.23';
-    })
-
-    // enables Sass/SCSS support
-    //.enableSassLoader()
-
-    // uncomment if you use TypeScript
-    //.enableTypeScriptLoader()
-
-    // uncomment if you use React
-    //.enableReactPreset()
-
-    // uncomment to get integrity="..." attributes on your script & link tags
-    // requires WebpackEncoreBundle 1.4 or higher
-    //.enableIntegrityHashes(Encore.isProduction())
-
-    // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
-;
+    // Agregar el plugin de Vue Loader
+    .addPlugin(new VueLoaderPlugin());
 
 module.exports = Encore.getWebpackConfig();
-
-const path = require('path');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
-
-module.exports = {
-    entry: './assets/app.js',
-    output: {
-        path: path.resolve(__dirname, 'public/build'),
-        filename: 'app.js'
-    },
-    module: {
-        rules: [
-            {
-                test: /\.vue$/,
-                loader: 'vue-loader'
-            },
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader'
-                }
-            },
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
-            }
-        ]
-    },
-    plugins: [
-        new VueLoaderPlugin()
-    ],
-};
