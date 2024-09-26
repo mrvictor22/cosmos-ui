@@ -1,9 +1,12 @@
-controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+app:
+    path: /{vueRouting}
+    controller: App\Controller\DefaultController::index
+    requirements:
+        vueRouting: "^(?!api).+"
+    defaults:
+        vueRouting: null
 
-login:
-    path: /login
-    controller: App\Controller\LoginController::index
+api:
+    path: /api/summary
+    controller: App\Controller\Api\ApiController::summary
+    methods: [get]

@@ -1,48 +1,61 @@
 <template>
-    <div class="login">
-      <h2>Login</h2>
-      <form @submit.prevent="submitLogin">
-        <div>
-          <label for="username">Username</label>
-          <input v-model="username" type="text" id="username" />
-        </div>
-        <div>
-          <label for="password">Password</label>
-          <input v-model="password" type="password" id="password" />
-        </div>
-        <button type="submit">Login</button>
-        <p v-if="error">{{ error }}</p>
-      </form>
-    </div>
+    <v-container class="login" max-width="500px">
+      <v-card>
+        <v-card-title class="headline">Login</v-card-title>
+        <v-form>
+          <v-card-text>
+            <v-text-field
+              v-model="username"
+              label="Username"
+              outlined
+              dense
+              required
+            />
+            <v-text-field
+              v-model="password"
+              label="Password"
+              type="password"
+              outlined
+              dense
+              required
+            />
+            <GoogleLogin :callback="callback"/>
+            <v-alert v-if="error" type="error" dense>{{ error }}</v-alert>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" type="submit" block>Login</v-btn>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-container>
   </template>
   
   <script>
   import axios from "axios";
+  import { googleSdkLoaded } from "vue3-google-login";
   
   export default {
     data() {
       return {
+        userDetails: null,
         username: "",
         password: "",
         error: null,
       };
     },
     methods: {
-      submitLogin() {
-        axios
-          .post("/login", {
-            username: this.username,
-            password: this.password,
-          })
-          .then((response) => {
-            // Redirigir o manejar login exitoso
-            window.location.href = "/dashboard"; // Ejemplo
-          })
-          .catch((error) => {
-            this.error = "Login failed. Please check your credentials.";
-          });
-      },
-    },
-  };
+        callback(response){
+            console.log(response);
+            
+        },
+    }
+  }
+      
   </script>
+  
+  <style scoped>
+  .login {
+    margin: 2rem auto;
+  }
+  </style>
   
