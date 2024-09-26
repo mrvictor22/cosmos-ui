@@ -9,7 +9,7 @@ Encore
     .setPublicPath('/build')
     
     // Definir el punto de entrada principal del proyecto
-    .addEntry('app', './assets/app.js')
+    .addEntry('app', './assets/js/app.js')
 
     // Habilitar Vue.js con la configuración correcta
     .enableVueLoader(() => {}, { runtimeCompilerBuild: true })
@@ -34,5 +34,6 @@ Encore
 
     // Agregar el plugin de Vue Loader
     .addPlugin(new VueLoaderPlugin());
+
 
 module.exports = Encore.getWebpackConfig();

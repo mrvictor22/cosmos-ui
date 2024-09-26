@@ -6,13 +6,13 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.css';
+import '../styles/app.css';
 import { createApp } from 'vue';
-import App from './App.vue';
-import router from './router';
+import App from '../App.vue';
+import router from '../router';
 
-createApp(App)
-  .mount('#app');
+createApp(App).use(router).mount('#app');
+
 
 
   console.log("Text test")

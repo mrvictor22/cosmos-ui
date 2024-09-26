@@ -1,8 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import SummaryChart from './components/SummaryChart.vue';
+import Login from './components/Login.vue';  // Adjust the path if necessary
 
 const routes = [
-    { path: '/summary', component: SummaryChart }
+    {
+        path: '/login',
+        name: 'login',
+        component: Login
+    }
 ];
 
 const router = createRouter({

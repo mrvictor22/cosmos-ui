@@ -5,5 +5,5 @@ controllers:
     type: attribute
 
 login:
-    path: /
+    path: /login
     controller: App\Controller\LoginController::index
